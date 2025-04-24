@@ -16,7 +16,8 @@ bool zoom_out = false;
 struct Light {
     bool active;
     float pos[3];
-    float dir[3];
+    float cor[3];
+    float dre[2];
     bool thrown;
     float distance;
     float max_distance;
@@ -60,10 +61,10 @@ void initLights() {
 
     // Initialize four lights with different colors in fixed order
     lights = {
-        {true, {0.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}, false, 0.0f, 10.0f, false}, // Red light (first)
-        {true, {0.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f}, false, 0.0f, 10.0f, false}, // Green light (second)
-        {true, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 1.0f}, false, 0.0f, 10.0f, false}, // Blue light (third)
-        {true, {0.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 0.0f}, false, 0.0f, 10.0f, false}  // Yellow light (fourth)
+        {true, {0.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}, false, 0.0f, 10.0f, false}, // Red light (first)
+        {true, {0.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}, false, 0.0f, 10.0f, false}, // Green light (second)
+        {true, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}, false, 0.0f, 10.0f, false}, // Blue light (third)
+        {true, {0.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 0.0f}, {0.0f, 0.0f}, false, 0.0f, 10.0f, false}  // Yellow light (fourth)
     };
 }
 
@@ -83,9 +84,9 @@ void drawMaze() {
         for (auto &light : lights) {
             if (light.thrown && !light.hit_wall) {
                 // Set wall color to the color of the light
-                wall_color[0] = light.dir[0]; // Red component
-                wall_color[1] = light.dir[1]; // Green component
-                wall_color[2] = light.dir[2]; // Blue component
+                wall_color[0] = light.cor[0]; // Red component
+                wall_color[1] = light.cor[1]; // Green component
+                wall_color[2] = light.cor[2]; // Blue component
                 break;
             }
         }
@@ -158,8 +159,8 @@ void drawLights() {
             GLfloat light_position[] = {lights[i].pos[0], lights[i].pos[1], 0.0f, 1.0f};
             
             // Use the pre-set color from initialization (don't modify it)
-            GLfloat light_diffuse[] = {lights[i].dir[0], lights[i].dir[1], lights[i].dir[2], 1.0f};
-            GLfloat light_specular[] = {lights[i].dir[0], lights[i].dir[1], lights[i].dir[2], 1.0f};
+            GLfloat light_diffuse[] = {lights[i].cor[0], lights[i].cor[1], lights[i].cor[2], 1.0f};
+            GLfloat light_specular[] = {lights[i].cor[0], lights[i].cor[1], lights[i].cor[2], 1.0f};
             GLfloat light_ambient[] = {0.0f, 0.0f, 0.0f, 1.0f};
 
             glLightfv(GL_LIGHT0 + i, GL_POSITION, light_position);
@@ -170,7 +171,7 @@ void drawLights() {
             // Draw the wireframe sphere with the correct color
             glPushMatrix();
             glTranslatef(lights[i].pos[0], lights[i].pos[1], 0.0f);
-            glColor3f(lights[i].dir[0], lights[i].dir[1], lights[i].dir[2]);
+            glColor3f(lights[i].cor[0], lights[i].cor[1], lights[i].cor[2]);
             glutWireSphere(0.3f, 16, 16);
             glPopMatrix();
         } else {
@@ -236,8 +237,10 @@ void throwLight() {
             lights[i].pos[1] = player.pos[1];
             
             // Set direction based on current light_direction
-            lights[i].dir[0] = light_direction[0];
-            lights[i].dir[1] = light_direction[1];
+            lights[i].dre[0] = light_direction[0];
+            lights[i].dre[1] = light_direction[1];
+            /*lights[i].dir[0] = light_direction[0];
+            lights[i].dir[1] = light_direction[1];*/
             
             // Keep the original color (don't modify lights[i].dir[2] as it contains the color info)
             lights[i].distance = 0.0f;
@@ -258,8 +261,8 @@ void updateLights() {
     for (auto &light : lights) {
         if (light.thrown && !light.hit_wall) {
             // Move the light
-            light.pos[0] += light.dir[0] * 0.05f; // Slower movement
-            light.pos[1] += light.dir[1] * 0.05f;
+            light.pos[0] += light.dre[0] * 0.05f; // Slower movement
+            light.pos[1] += light.dre[1] * 0.05f;
             light.distance += 0.05f;
 
             // Check for collisions with walls
