@@ -37,6 +37,8 @@ std::pair<float, float> end_point = {15.0f, 15.0f};
 float camera_distance = 5.0f;
 float spin = 0.0f;
 float light_direction[2] = {0.0f, 1.0f}; // Default direction is "up"
+float camera_angle = 45.0f; // Angle of the camera looking down
+float camera_height = 10.0f; // Height of the camera above the ground
 
 void initMaze() {
     // Simple maze walls
@@ -50,19 +52,18 @@ void initMaze() {
 }
 
 void initLights() {
-    glEnable(GL_LIGHTING); // Enable lighting
-    glEnable(GL_DEPTH_TEST); // Enable depth testing
+    glEnable(GL_LIGHTING);
+    glEnable(GL_DEPTH_TEST);
 
-    // Set global ambient light to black (pitch black scene)
     GLfloat global_ambient[] = {0.0f, 0.0f, 0.0f, 1.0f};
     glLightModelfv(GL_LIGHT_MODEL_AMBIENT, global_ambient);
 
-    // Initialize four white lights (but keep them off initially)
+    // Initialize four lights with different colors in fixed order
     lights = {
-        {true, {0.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 1.0f}, false, 0.0f, 10.0f, false},
-        {true, {0.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 1.0f}, false, 0.0f, 10.0f, false},
-        {true, {0.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 1.0f}, false, 0.0f, 10.0f, false},
-        {true, {0.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 1.0f}, false, 0.0f, 10.0f, false}
+        {true, {0.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}, false, 0.0f, 10.0f, false}, // Red light (first)
+        {true, {0.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f}, false, 0.0f, 10.0f, false}, // Green light (second)
+        {true, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 1.0f}, false, 0.0f, 10.0f, false}, // Blue light (third)
+        {true, {0.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 0.0f}, false, 0.0f, 10.0f, false}  // Yellow light (fourth)
     };
 }
 
@@ -74,26 +75,57 @@ void drawTextGame(float x, float y, const std::string &text) {
 }
 
 void drawMaze() {
-    // Mirror-like wall material properties
-    GLfloat wall_ambient[] = {0.0f, 0.0f, 0.0f, 1.0f};  // No ambient reflection
-    GLfloat wall_diffuse[] = {0.8f, 0.8f, 0.8f, 1.0f};  // High diffuse reflection (white)
-    GLfloat wall_specular[] = {1.0f, 1.0f, 1.0f, 1.0f}; // Maximum specular reflection (white)
-    GLfloat wall_shininess[] = {128.0f};                // Maximum shininess for mirror effect
-
-    // Apply the material properties to the walls
-    glMaterialfv(GL_FRONT, GL_AMBIENT, wall_ambient);
-    glMaterialfv(GL_FRONT, GL_DIFFUSE, wall_diffuse);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, wall_specular);
-    glMaterialfv(GL_FRONT, GL_SHININESS, wall_shininess);
-
-    // Draw maze walls as stretched cubes (rectangular prisms)
     for (auto &wall : maze_walls) {
+        // Default wall color (black if not illuminated)
+        GLfloat wall_color[] = {0.0f, 0.0f, 0.0f, 1.0f};
+
+        // Check if any light illuminates this wall
+        for (auto &light : lights) {
+            if (light.thrown && !light.hit_wall) {
+                // Set wall color to the color of the light
+                wall_color[0] = light.dir[0]; // Red component
+                wall_color[1] = light.dir[1]; // Green component
+                wall_color[2] = light.dir[2]; // Blue component
+                break;
+            }
+        }
+
+        // Apply the wall's material properties
+        glMaterialfv(GL_FRONT, GL_AMBIENT, wall_color);
+        glMaterialfv(GL_FRONT, GL_DIFFUSE, wall_color);
+        glMaterialfv(GL_FRONT, GL_SPECULAR, wall_color);
+
+        // Declare shininess as a variable
+        GLfloat shininess[] = {50.0f};
+        glMaterialfv(GL_FRONT, GL_SHININESS, shininess);
+
+        // Draw the wall as a stretched cube
         glPushMatrix();
         glTranslatef(wall.first, wall.second + 2.0f, 0.0f); // Center the wall vertically
-        glScalef(1.0f, 4.0f, 1.0f); // Stretch the cube into a vertical wall
+        glScalef(1.0f, 4.0f, 3.0f); // Stretch the cube into a vertical wall
         glutSolidCube(1.0f);        // Draw a solid cube (stretched into a wall)
         glPopMatrix();
     }
+}
+
+void drawEndPoint() {
+    // Material properties for the endpoint
+    GLfloat end_ambient[] = {0.0f, 0.5f, 0.0f, 1.0f};  // Green ambient reflection
+    GLfloat end_diffuse[] = {0.0f, 1.0f, 0.0f, 1.0f};  // Bright green diffuse reflection
+    GLfloat end_specular[] = {0.5f, 1.0f, 0.5f, 1.0f}; // Green specular reflection
+    GLfloat end_shininess[] = {50.0f};                 // Moderate shininess
+
+    // Apply the material properties to the endpoint
+    glMaterialfv(GL_FRONT, GL_AMBIENT, end_ambient);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, end_diffuse);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, end_specular);
+    glMaterialfv(GL_FRONT, GL_SHININESS, end_shininess);
+
+    // Draw the endpoint as a sphere
+    glPushMatrix();
+    glTranslatef(end_point.first, end_point.second, 0.5f); // Position the endpoint slightly above the ground
+    glutSolidSphere(0.5f, 20, 20); // Draw a solid sphere
+    glPopMatrix();
 }
 
 void drawPlayer() {
@@ -120,28 +152,29 @@ void drawLights() {
         if (!lights[i].active) continue;
 
         if (lights[i].thrown) {
-            // Enable the light
             glEnable(GL_LIGHT0 + i);
 
-            // Set white light properties
-            GLfloat light_position[] = {lights[i].pos[0], lights[i].pos[1], 0.0f, 1.0f}; // Position of the light
-            GLfloat light_diffuse[] = {1.0f, 1.0f, 1.0f, 1.0f}; // White diffuse light
-            GLfloat light_specular[] = {1.0f, 1.0f, 1.0f, 1.0f}; // White specular light
-            GLfloat light_ambient[] = {0.0f, 0.0f, 0.0f, 1.0f}; // No ambient light
+            // Position the light (keep z at 0.0 for ground level)
+            GLfloat light_position[] = {lights[i].pos[0], lights[i].pos[1], 0.0f, 1.0f};
+            
+            // Use the pre-set color from initialization (don't modify it)
+            GLfloat light_diffuse[] = {lights[i].dir[0], lights[i].dir[1], lights[i].dir[2], 1.0f};
+            GLfloat light_specular[] = {lights[i].dir[0], lights[i].dir[1], lights[i].dir[2], 1.0f};
+            GLfloat light_ambient[] = {0.0f, 0.0f, 0.0f, 1.0f};
 
             glLightfv(GL_LIGHT0 + i, GL_POSITION, light_position);
             glLightfv(GL_LIGHT0 + i, GL_DIFFUSE, light_diffuse);
             glLightfv(GL_LIGHT0 + i, GL_SPECULAR, light_specular);
             glLightfv(GL_LIGHT0 + i, GL_AMBIENT, light_ambient);
 
-            // Draw a wireframe sphere around the light
+            // Draw the wireframe sphere with the correct color
             glPushMatrix();
-            glTranslatef(lights[i].pos[0], lights[i].pos[1], 0.0f); // Position the sphere at the light's position
-            glColor3f(1.0f, 1.0f, 1.0f); // Set the sphere color to white
-            glutWireSphere(0.3f, 16, 16); // Draw a wireframe sphere with radius 0.3
+            glTranslatef(lights[i].pos[0], lights[i].pos[1], 0.0f);
+            glColor3f(lights[i].dir[0], lights[i].dir[1], lights[i].dir[2]);
+            glutWireSphere(0.3f, 16, 16);
             glPopMatrix();
         } else {
-            glDisable(GL_LIGHT0 + i); // Disable the light if not thrown
+            glDisable(GL_LIGHT0 + i);
         }
     }
 }
@@ -149,29 +182,43 @@ void drawLights() {
 void gameDisplay() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
-    // Set up top-down view
+    // Set up perspective view
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    if (zoom_out) {
-        gluOrtho2D(-5, 20, -5, 20);
-    } else {
-        gluOrtho2D(player.pos[0] - 5, player.pos[0] + 5, 
-                   player.pos[1] - 5, player.pos[1] + 5);
-    }
+    gluPerspective(60.0, 1.0, 0.1, 100.0);
     
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     
+    // Position the camera at an angle
+
+    if (zoom_out) {
+        // Zoomed out view shows whole maze
+        gluLookAt(7.5, 7.5, camera_height,  // Camera position (center of maze, from above)
+                  7.5, 7.5, 0.0,            // Looking at center of maze
+                  0.0, 1.0, 0.0);           // Up vector
+    } else {
+        // Normal view follows player
+        gluLookAt(player.pos[0] - 3.0, player.pos[1] - 3.0, camera_height, // Camera position (offset from player)
+                  player.pos[0], player.pos[1], 0.0,                       // Looking at player
+                  0.0, 0.0, 1.0);                                         // Up vector
+    }
+    
     drawMaze();
+    drawEndPoint();
     drawPlayer();
     drawLights();
-    /*
-    When the game starts, the player's ball is copied from the start screen's ball (with green and blue lights except a red light) and the walls are as green as how the ball in the start screen is. The game only allows the player to throw one white light.
-    */
+    
     if (game_over) {
         glDisable(GL_LIGHTING);
         glColor3f(1.0f, 1.0f, 1.0f);
-        drawTextGame(player.pos[0] - 2.0f, player.pos[1] + 2.0f, "YOU WIN! Maze Complete");
+        // Position text in 3D space
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        gluOrtho2D(0, glutGet(GLUT_WINDOW_WIDTH), 0, glutGet(GLUT_WINDOW_HEIGHT));
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+        drawTextGame(glutGet(GLUT_WINDOW_WIDTH)/2 - 100, glutGet(GLUT_WINDOW_HEIGHT)/2, "YOU WIN! Maze Complete");
         glEnable(GL_LIGHTING);
     }
     
@@ -181,18 +228,27 @@ void gameDisplay() {
 void throwLight() {
     if (player.remaining_lights <= -1) return;
 
+    // Find the next available light in order
     for (int i = 0; i < lights.size(); i++) {
         if (lights[i].active && !lights[i].thrown) {
             lights[i].thrown = true;
-            lights[i].pos[0] = player.pos[0]; // Start at the player's position
+            lights[i].pos[0] = player.pos[0];
             lights[i].pos[1] = player.pos[1];
-            lights[i].dir[0] = light_direction[0]; // Set the direction
+            
+            // Set direction based on current light_direction
+            lights[i].dir[0] = light_direction[0];
             lights[i].dir[1] = light_direction[1];
+            
+            // Keep the original color (don't modify lights[i].dir[2] as it contains the color info)
             lights[i].distance = 0.0f;
             lights[i].hit_wall = false;
             player.remaining_lights--;
 
-            printf("White light is being thrown!\n");
+            printf("Throwing %s light in direction (%f, %f)\n", 
+                  (i == 0) ? "Red" : 
+                  (i == 1) ? "Green" : 
+                  (i == 2) ? "Blue" : "Yellow", 
+                  light_direction[0], light_direction[1]);
             break;
         }
     }
@@ -231,7 +287,8 @@ void update(int value) {
         
         updateLights();
         
-        if (sqrt(pow(player.pos[0] - end_point.first, 2) + pow(player.pos[1] - end_point.second, 2) < 1.0f)) {
+        // Check if the player has reached the endpoint
+        if (sqrt(pow(player.pos[0] - end_point.first, 2) + pow(player.pos[1] - end_point.second, 2)) < 1.0f) {
             game_over = true;
             zoom_out = true;
         }
