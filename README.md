@@ -1,6 +1,14 @@
 # MazeBallGame
 "MazeBallGame" é um jogo 3D original (criado por nós, André Luís e Mário) que brinca com estruturas da disciplina de computação gráfica.
-O jogador controla uma esfera espelhada que se move por um labirinto no escuro total, mas pode lançar luzes que se apagam rapidamente. O objetivo é chegar ao fim do labirinto antes que todas as luzes se apaguem. 
+
+O jogador controla uma esfera espelhada que se move por um labirinto no escuro total, mas pode lançar luzes que se apagam rapidamente. O objetivo é chegar ao fim do labirinto antes que todas as luzes se apaguem.
+
+# Imagens
+![Tela de inicio](https://i.imgur.com/0NccQuW.png)
+
+![Jogo em execução](https://i.imgur.com/LWFbSUV.png)
+
+![Fim](https://i.imgur.com/SaOkbbg.png)
 
 # Jogabilidade
 Usando WASD e as setas do teclado, o jogador move a esfera e desvia das paredes do labirinto para encontrar a saída
