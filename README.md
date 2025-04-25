@@ -1,5 +1,5 @@
 # MazeBallGame
-"MazeBallGame" é um jogo 3D original (criado por nós, André Luís e Mario) que brinca com estruturas da disciplina de computação gráfica.
+"MazeBallGame" é um jogo 3D original (criado por nós, André Luís e Mário) que brinca com estruturas da disciplina de computação gráfica.
 O jogador controla uma esfera espelhada que se move por um labirinto no escuro total, mas pode lançar luzes que se apagam rapidamente. O objetivo é chegar ao fim do labirinto antes que todas as luzes se apaguem. 
 
 # Jogabilidade
@@ -8,5 +8,16 @@ Usando WASD e as setas do teclado, o jogador move a esfera e desvia das paredes 
 # Conceitos 
 O jogo usa estruturas como luz, reflexão, colisão, sombras e cores para demonstrar aplicação dos conceitos da disciplina
 
-# Como abrir - Linux
+# Como abrir (Linux)
 Digite "a_maze_game.c amaze_menu.c -o a_maze_game -lGL -lGLU -lglut && ./a_maze_game" (sem as aspas) no terminal do Linux
+
+# Principais problemas encontrados:
+-Jogo era para ser em uma perspectiva top-down, mas desse jeito, o aplicativo não mostrava as paredes. Tivemos que mudar a vista para isométrica
+-Um "oversight" no código fez com que, inicialmente, a direção das luzes jogadas determinasse a cor delas
+
+# O que pode ser melhorado:
+-Fazer o jogo ser mais completo com inimigos e colecionáveis
+
+# O que cada integrante fez:
+-André: Programação da tela de início, movimento e design geral
+-Mário: Programação da lógica da luz, debugging e playtester
