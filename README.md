@@ -20,14 +20,14 @@ O jogo usa estruturas como luz, reflexão, colisão, sombras e cores para demons
 Digite "a_maze_game.c amaze_menu.c -o a_maze_game -lGL -lGLU -lglut && ./a_maze_game" (sem as aspas) no terminal do Linux
 
 # Principais problemas encontrados:
--Jogo era para ser em uma perspectiva top-down, mas desse jeito, o aplicativo não mostrava as paredes. Tivemos que mudar a vista para isométrica
+Jogo era para ser em uma perspectiva top-down, mas desse jeito, o aplicativo não mostrava as paredes. Tivemos que mudar a vista para isométrica
 
--Um "oversight" no código fez com que, inicialmente, a direção das luzes jogadas determinasse a cor delas
+Um "oversight" no código fez com que, inicialmente, a direção das luzes jogadas determinasse a cor delas
 
 # O que pode ser melhorado:
--Fazer o jogo ser mais completo com inimigos e colecionáveis
+Fazer o jogo ser mais completo com inimigos e colecionáveis
 
 # O que cada integrante fez:
--André: Programação da tela de início, movimento e design geral
+André: Programação da tela de início, movimento e design geral
 
--Mário: Programação da lógica da luz, debugging e playtester
+Mário: Programação da lógica da luz, debugging e playtester
