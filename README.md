@@ -5,7 +5,7 @@ Type a_maze_game.c amaze_menu.c -o a_maze_game -lGL -lGLU -lglut && ./a_maze_gam
 
 # MazeGame
 
-=> Porpósito
+=> Propósito
 "Amaze Game" é um jogo 3D original (criado por nós, André Luís e Mario) que brinca com estruturas da disciplina de computação gráfica.
 O jogador controla uma esfera espelhada que se move por um labirinto no escuro total, mas pode lançar luzes que se apagam rapidamente. O objetivo é chegar ao fim do labirinto antes que todas as luzes se apaguem. 
 
