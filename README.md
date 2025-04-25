@@ -1,9 +1,4 @@
-# MazeGame
-A experimental OpenGL project
-# How to execute - Linux
-Type a_maze_game.c amaze_menu.c -o a_maze_game -lGL -lGLU -lglut && ./a_maze_game in the terminal
-
-# MazeGame
+# MazeBallGame
 
 => Propósito
 "Amaze Game" é um jogo 3D original (criado por nós, André Luís e Mario) que brinca com estruturas da disciplina de computação gráfica.
@@ -15,3 +10,5 @@ Usando WASD e as setas do teclado, o jogador move a esfera e desvia das paredes 
 => Conceitos 
 O jogo usa estruturas como luz, reflexão, colisão, sombras e cores para demonstrar aplicação dos conceitos da disciplina
 
+=> Como abrir - Linux
+Digite "a_maze_game.c amaze_menu.c -o a_maze_game -lGL -lGLU -lglut && ./a_maze_game" (sem as aspas) no terminal do Linux
