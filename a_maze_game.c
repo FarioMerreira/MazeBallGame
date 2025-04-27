@@ -29,7 +29,7 @@ struct Player {
     int remaining_lights;
 };
 
-Player player = {{0.0f, 0.0f}, 3};
+Player player = {{1.0f, 1.0f}, 3};
 std::vector<Light> lights;
 std::vector<std::pair<float, float>> maze_walls;
 std::pair<float, float> end_point = {15.0f, 15.0f};
@@ -84,9 +84,6 @@ void initMaze() {
         {1.0f, 14.0f}, {6.0f, 14.0f},
         {8.0f, 14.0f}, {14.0f, 14.0f},
     };
-
-    // Remove a small section of the bottom wall for the entrance
-    maze_walls.erase(std::remove(maze_walls.begin(), maze_walls.end(), std::make_pair(0.0f, 0.0f)), maze_walls.end());
 
     // Remove a small section of the top wall for the exit
     maze_walls.erase(std::remove(maze_walls.begin(), maze_walls.end(), std::make_pair(15.0f, 15.0f)), maze_walls.end());
@@ -295,11 +292,6 @@ void throwLight() {
             lights[i].hit_wall = false;
             //player.remaining_lights--; 
 
-            printf("Throwing %s light in direction (%f, %f)\n", 
-                  (i == 0) ? "Red" : 
-                  (i == 1) ? "Green" : 
-                  (i == 2) ? "Blue" : "Yellow", 
-                  light_direction[0], light_direction[1]);
             break;
         }
     }
@@ -358,22 +350,22 @@ void gameKeyboard(unsigned char key, int x, int y) {
         case ' ':
             if (!game_over) throwLight();
             break;
-        case 'w': // Move up
+        case 'a': // Move up
             if (!game_over) new_y += move_speed;
             light_direction[0] = 0.0f;
             light_direction[1] = 1.0f;
             break;
-        case 's': // Move down
+        case 'd': // Move down
             if (!game_over) new_y -= move_speed;
             light_direction[0] = 0.0f;
             light_direction[1] = -1.0f;
             break;
-        case 'a': // Move left
+        case 's': // Move left
             if (!game_over) new_x -= move_speed;
             light_direction[0] = -1.0f;
             light_direction[1] = 0.0f;
             break;
-        case 'd': // Move right
+        case 'w': // Move right
             if (!game_over) new_x += move_speed;
             light_direction[0] = 1.0f;
             light_direction[1] = 0.0f;
@@ -405,22 +397,18 @@ void gameSpecialKeyboard(int key, int x, int y) {
         case GLUT_KEY_UP: // Light direction: up
             light_direction[0] = 0.0f;
             light_direction[1] = 1.0f;
-            printf("Light direction set to UP\n");
             break;
         case GLUT_KEY_DOWN: // Light direction: down
             light_direction[0] = 0.0f;
             light_direction[1] = -1.0f;
-            printf("Light direction set to DOWN\n");
             break;
         case GLUT_KEY_LEFT: // Light direction: left
             light_direction[0] = -1.0f;
             light_direction[1] = 0.0f;
-            printf("Light direction set to LEFT\n");
             break;
         case GLUT_KEY_RIGHT: // Light direction: right
             light_direction[0] = 1.0f;
             light_direction[1] = 0.0f;
-            printf("Light direction set to RIGHT\n");
             break;
     }
 }
@@ -431,7 +419,7 @@ void switchToGameMode() {
     initMaze();
     
     // Reset game state
-    player = {{0.0f, 0.0f}, 3};
+    player = {{2.0f, 2.0f}, 3};
     game_over = false;
     zoom_out = false;
     
