@@ -87,17 +87,17 @@ void drawMenu() {
     int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
     
     // Draw title
-    drawText(windowWidth/2 - 75, windowHeight - 600, "MAZE BALL GAME");
+    drawText(windowWidth/2 - 75, windowHeight - 525, "MAZE BALL GAME");
     
-    drawText(windowWidth/2 - 50, windowHeight - 750, "CONTROLS:");
-    drawText(windowWidth/2 - 90, windowHeight - 775, "WASD  -   Move Player");
-    drawText(windowWidth/2 - 90, windowHeight - 800, "<^v>     - Aim Light");
-    drawText(windowWidth/2 - 90, windowHeight - 825, "SPACE - Throw Light");
+    drawText(windowWidth/2 - 50, windowHeight - 650, "CONTROLS:");
+    drawText(windowWidth/2 - 90, windowHeight - 675, "WASD  -   Move Player");
+    drawText(windowWidth/2 - 90, windowHeight - 700, "<^v>     - Aim Light");
+    drawText(windowWidth/2 - 90, windowHeight - 725, "SPACE - Throw Light");
     
     
     // Draw instructions
-    drawText(windowWidth/2 - 110, windowHeight - 975, "Press SPACE to start game");
-    drawText(windowWidth/2 - 75, windowHeight - 1000, "Press ESC to exit");
+    drawText(windowWidth/2 - 110, windowHeight - 875, "Press SPACE to start game");
+    drawText(windowWidth/2 - 75, windowHeight - 900, "Press ESC to exit");
     
     // Restore state
     glEnable(GL_DEPTH_TEST);
