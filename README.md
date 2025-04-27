@@ -24,6 +24,8 @@ Jogo era para ser em uma perspectiva top-down, mas desse jeito, o aplicativo nã
 
 Um "oversight" no código fez com que, inicialmente, a direção das luzes jogadas determinasse a cor delas
 
+Problmas na geração de paredes
+
 # O que pode ser melhorado:
 Fazer o jogo ser mais completo com inimigos e colecionáveis
 
