@@ -42,14 +42,36 @@ float camera_angle = 45.0f; // Angle of the camera looking down
 float camera_height = 10.0f; // Height of the camera above the ground
 
 void initMaze() {
-    // Simple maze walls
+    // Define horizontal and vertical walls to create a complete maze
     maze_walls = {
-        {2.0f, 0.0f}, {2.0f, 4.0f}, 
-        {5.0f, 3.0f}, {5.0f, 7.0f},
-        {8.0f, 0.0f}, {8.0f, 4.0f},
-        {11.0f, 5.0f}, {11.0f, 9.0f},
-        {14.0f, 2.0f}, {14.0f, 6.0f}
+        // Horizontal walls (top and bottom boundaries)
+        {0.0f, 0.0f}, {15.0f, 0.0f}, // Bottom wall (with entrance at x = 0.0)
+        {0.0f, 15.0f}, {15.0f, 15.0f}, // Top wall (with exit at x = 15.0)
+
+        // Vertical walls (left and right boundaries)
+        {0.0f, 0.0f}, {0.0f, 15.0f}, // Left wall
+        {15.0f, 0.0f}, {15.0f, 15.0f}, // Right wall
+
+        // Horizontal walls (internal maze structure)
+        {2.0f, 2.0f}, {6.0f, 2.0f},
+        {8.0f, 4.0f}, {12.0f, 4.0f},
+        {4.0f, 6.0f}, {10.0f, 6.0f},
+        {2.0f, 8.0f}, {6.0f, 8.0f},
+        {8.0f, 10.0f}, {12.0f, 10.0f},
+
+        // Vertical walls (internal maze structure)
+        {3.0f, 3.0f}, {3.0f, 7.0f},
+        {5.0f, 5.0f}, {5.0f, 9.0f},
+        {7.0f, 3.0f}, {7.0f, 7.0f},
+        {9.0f, 5.0f}, {9.0f, 9.0f},
+        {11.0f, 3.0f}, {11.0f, 7.0f}
     };
+
+    // Remove a small section of the bottom wall for the entrance
+    maze_walls.erase(std::remove(maze_walls.begin(), maze_walls.end(), std::make_pair(0.0f, 0.0f)), maze_walls.end());
+
+    // Remove a small section of the top wall for the exit
+    maze_walls.erase(std::remove(maze_walls.begin(), maze_walls.end(), std::make_pair(15.0f, 15.0f)), maze_walls.end());
 }
 
 void initLights() {
@@ -62,9 +84,15 @@ void initLights() {
     // Initialize four lights with different colors in fixed order
     lights = {
         {true, {0.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}, false, 0.0f, 10.0f, false}, // Red light (first)
-        {true, {0.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}, false, 0.0f, 10.0f, false}, // Green light (second)
-        {true, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}, false, 0.0f, 10.0f, false}, // Blue light (third)
-        {true, {0.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 0.0f}, {0.0f, 0.0f}, false, 0.0f, 10.0f, false}  // Yellow light (fourth)
+        {true, {0.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}, false, 0.0f, 10.0f, false}, // Red light (first)
+        {true, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}, false, 0.0f, 10.0f, false}, // Red light (first)
+        {true, {0.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}, false, 0.0f, 10.0f, false}, // Red light (first)
+        {true, {0.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}, false, 0.0f, 10.0f, false}, // Red light (first)
+        {true, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}, false, 0.0f, 10.0f, false}, // Red light (first)
+        {true, {0.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}, false, 0.0f, 10.0f, false}, // Red light (first)
+        {true, {0.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}, false, 0.0f, 10.0f, false}, // Red light (first)
+        {true, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}, false, 0.0f, 10.0f, false}, // Red light (first)
+        {true, {0.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f}, false, 0.0f, 10.0f, false} // Red light (first)
     };
 }
 
@@ -229,6 +257,7 @@ void gameDisplay() {
 void throwLight() {
     if (player.remaining_lights <= -1) return;
 
+    //player.remaining_lights = 14;
     // Find the next available light in order
     for (int i = 0; i < lights.size(); i++) {
         if (lights[i].active && !lights[i].thrown) {
@@ -245,7 +274,7 @@ void throwLight() {
             // Keep the original color (don't modify lights[i].dir[2] as it contains the color info)
             lights[i].distance = 0.0f;
             lights[i].hit_wall = false;
-            player.remaining_lights--;
+            //player.remaining_lights--; 
 
             printf("Throwing %s light in direction (%f, %f)\n", 
                   (i == 0) ? "Red" : 
