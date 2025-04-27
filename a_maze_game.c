@@ -42,29 +42,47 @@ float camera_angle = 45.0f; // Angle of the camera looking down
 float camera_height = 10.0f; // Height of the camera above the ground
 
 void initMaze() {
-    // Define horizontal and vertical walls to create a complete maze
     maze_walls = {
-        // Horizontal walls (top and bottom boundaries)
-        {0.0f, 0.0f}, {15.0f, 0.0f}, // Bottom wall (with entrance at x = 0.0)
-        {0.0f, 15.0f}, {15.0f, 15.0f}, // Top wall (with exit at x = 15.0)
+        // Bordas externas
+        {0.0f, 0.0f}, {15.0f, 0.0f},
+        {0.0f, 15.0f}, {15.0f, 15.0f},
+        {0.0f, 0.0f}, {0.0f, 15.0f},
+        {15.0f, 0.0f}, {15.0f, 15.0f},
 
-        // Vertical walls (left and right boundaries)
-        {0.0f, 0.0f}, {0.0f, 15.0f}, // Left wall
-        {15.0f, 0.0f}, {15.0f, 15.0f}, // Right wall
+        // Paredes internas baseadas no desenho:
 
-        // Horizontal walls (internal maze structure)
-        {2.0f, 2.0f}, {6.0f, 2.0f},
-        {8.0f, 4.0f}, {12.0f, 4.0f},
-        {4.0f, 6.0f}, {10.0f, 6.0f},
-        {2.0f, 8.0f}, {6.0f, 8.0f},
-        {8.0f, 10.0f}, {12.0f, 10.0f},
+        // Região superior
+        {1.0f, 0.0f}, {1.0f, 2.0f},
+        {3.0f, 0.0f}, {3.0f, 1.0f},
+        {4.0f, 1.0f}, {7.0f, 1.0f},
+        {6.0f, 0.0f}, {6.0f, 1.0f},
+        {8.0f, 0.0f}, {8.0f, 4.0f},
+        {10.0f, 2.0f}, {14.0f, 2.0f},
+        {12.0f, 0.0f}, {12.0f, 2.0f},
 
-        // Vertical walls (internal maze structure)
-        {3.0f, 3.0f}, {3.0f, 7.0f},
-        {5.0f, 5.0f}, {5.0f, 9.0f},
-        {7.0f, 3.0f}, {7.0f, 7.0f},
-        {9.0f, 5.0f}, {9.0f, 9.0f},
-        {11.0f, 3.0f}, {11.0f, 7.0f}
+        // Região central
+        {2.0f, 3.0f}, {2.0f, 7.0f},
+        {4.0f, 3.0f}, {6.0f, 3.0f},
+        {5.0f, 3.0f}, {5.0f, 5.0f},
+        {7.0f, 4.0f}, {9.0f, 4.0f},
+        {9.0f, 4.0f}, {9.0f, 8.0f},
+        {11.0f, 5.0f}, {13.0f, 5.0f},
+        {11.0f, 5.0f}, {11.0f, 8.0f},
+        {13.0f, 5.0f}, {13.0f, 7.0f},
+
+        // Região inferior
+        {1.0f, 8.0f}, {5.0f, 8.0f},
+        {3.0f, 8.0f}, {3.0f, 12.0f},
+        {5.0f, 9.0f}, {7.0f, 9.0f},
+        {7.0f, 9.0f}, {7.0f, 13.0f},
+        {9.0f, 10.0f}, {11.0f, 10.0f},
+        {9.0f, 10.0f}, {9.0f, 14.0f},
+        {11.0f, 11.0f}, {13.0f, 11.0f},
+        {13.0f, 11.0f}, {13.0f, 13.0f},
+
+        // Pequenas paredes no canto inferior
+        {1.0f, 14.0f}, {6.0f, 14.0f},
+        {8.0f, 14.0f}, {14.0f, 14.0f},
     };
 
     // Remove a small section of the bottom wall for the entrance
@@ -73,6 +91,7 @@ void initMaze() {
     // Remove a small section of the top wall for the exit
     maze_walls.erase(std::remove(maze_walls.begin(), maze_walls.end(), std::make_pair(15.0f, 15.0f)), maze_walls.end());
 }
+
 
 void initLights() {
     glEnable(GL_LIGHTING);
