@@ -162,7 +162,7 @@ void drawScene(bool showMenu) {
     
     glPopMatrix();
     
-    // Draw menu if requested
+    //Desendo menu
     if (showMenu) {
         drawMenu();
     }
@@ -170,7 +170,7 @@ void drawScene(bool showMenu) {
 
 void menuDisplay(void)
 {
-    drawScene(!game_start_menu); // Show menu when game is not started
+    drawScene(!game_start_menu); //Mostrar menu enquanto o jogo nao iniciou
     glutSwapBuffers();
 }
 
@@ -188,11 +188,12 @@ void menuKeyboard(unsigned char key, int x, int y)
 {
     switch (key)
     {
-    case ' ': // SPACE key
+    case ' ': //Iniciando jogo
         game_start_menu = true;
         switchToGameMode();
         return;
-        
+    
+    //easter egg
     case 'r':
         red = !red;
         if (red)
@@ -217,7 +218,7 @@ void menuKeyboard(unsigned char key, int x, int y)
             glDisable(GL_LIGHT2);
         break;
         
-    case 27: // ESC key
+    case 27: //ESC = Sair do jogo
         exit(0);
         break;
     }
