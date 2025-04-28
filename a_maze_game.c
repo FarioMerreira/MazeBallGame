@@ -1,3 +1,5 @@
+//Codigo referente ao jogo
+
 #include <GL/glut.h>
 #include "amaze_menu.h"
 #include <stdlib.h>
@@ -7,12 +9,12 @@
 #include <string>
 #include <algorithm>
 
-// Game states (make these extern in amaze_menu.h)
+//Estados de jogo
 bool game_start = false;
 bool game_over = false;
 bool zoom_out = false;
 
-// Player and light states
+//Estruturas de luz e jogador
 struct Light {
     bool active;
     float pos[3];
@@ -34,13 +36,14 @@ std::vector<Light> lights;
 std::vector<std::pair<float, float>> maze_walls;
 std::pair<float, float> end_point = {15.0f, 15.0f};
 
-// Camera and view
+//Camera isometrica
 float camera_distance = 5.0f;
 float spin = 0.0f;
-float light_direction[2] = {0.0f, 1.0f}; // Default direction is "up"
-float camera_angle = 45.0f; // Angle of the camera looking down
-float camera_height = 10.0f; // Height of the camera above the ground
+float light_direction[2] = {0.0f, 1.0f};
+float camera_angle = 45.0f;
+float camera_height = 10.0f;
 
+//Iniciando parametros do labirinto
 void initMaze() {
     maze_walls = {
         // Bordas externas
@@ -85,11 +88,11 @@ void initMaze() {
         {8.0f, 14.0f}, {14.0f, 14.0f},
     };
 
-    // Remove a small section of the top wall for the exit
+    //Removendo secao para saida
     maze_walls.erase(std::remove(maze_walls.begin(), maze_walls.end(), std::make_pair(15.0f, 15.0f)), maze_walls.end());
 }
 
-
+//Iniciando parametros de luz
 void initLights() {
     glEnable(GL_LIGHTING);
     glEnable(GL_DEPTH_TEST);
@@ -97,18 +100,18 @@ void initLights() {
     GLfloat global_ambient[] = {0.0f, 0.0f, 0.0f, 1.0f};
     glLightModelfv(GL_LIGHT_MODEL_AMBIENT, global_ambient);
 
-    // Initialize four lights with different colors in fixed order
+    //Ordem das luzes: RGB tres vezes ; Branco
     lights = {
-        {true, {0.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}, false, 0.0f, 10.0f, false}, // Red light (first)
-        {true, {0.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}, false, 0.0f, 10.0f, false}, // Red light (first)
-        {true, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}, false, 0.0f, 10.0f, false}, // Red light (first)
-        {true, {0.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}, false, 0.0f, 10.0f, false}, // Red light (first)
-        {true, {0.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}, false, 0.0f, 10.0f, false}, // Red light (first)
-        {true, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}, false, 0.0f, 10.0f, false}, // Red light (first)
-        {true, {0.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}, false, 0.0f, 10.0f, false}, // Red light (first)
-        {true, {0.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}, false, 0.0f, 10.0f, false}, // Red light (first)
-        {true, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}, false, 0.0f, 10.0f, false}, // Red light (first)
-        {true, {0.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f}, false, 0.0f, 10.0f, false} // Red light (first)
+        {true, {0.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}, false, 0.0f, 10.0f, false},
+        {true, {0.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}, false, 0.0f, 10.0f, false},
+        {true, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}, false, 0.0f, 10.0f, false},
+        {true, {0.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}, false, 0.0f, 10.0f, false},
+        {true, {0.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}, false, 0.0f, 10.0f, false},
+        {true, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}, false, 0.0f, 10.0f, false},
+        {true, {0.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}, false, 0.0f, 10.0f, false},
+        {true, {0.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}, false, 0.0f, 10.0f, false},
+        {true, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}, false, 0.0f, 10.0f, false},
+        {true, {0.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f}, false, 0.0f, 10.0f, false} 
     };
 }
 
@@ -119,77 +122,75 @@ void drawTextGame(float x, float y, const std::string &text) {
     }
 }
 
+//Gerando labirinto
 void drawMaze() {
     for (auto &wall : maze_walls) {
-        // Default wall color (black if not illuminated)
+        //Se a parede nao for iluminada, ela estara preta
         GLfloat wall_color[] = {0.0f, 0.0f, 0.0f, 1.0f};
 
-        // Check if any light illuminates this wall
+        //Checando contato de luz
         for (auto &light : lights) {
             if (light.thrown && !light.hit_wall) {
-                // Set wall color to the color of the light
-                wall_color[0] = light.cor[0]; // Red component
-                wall_color[1] = light.cor[1]; // Green component
-                wall_color[2] = light.cor[2]; // Blue component
+                //E configurando a cor da parede referente a luz dominante
+                wall_color[0] = light.cor[0];
+                wall_color[1] = light.cor[1];
+                wall_color[2] = light.cor[2];
                 break;
             }
         }
 
-        // Apply the wall's material properties
+        //Aplicando propriedades
         glMaterialfv(GL_FRONT, GL_AMBIENT, wall_color);
         glMaterialfv(GL_FRONT, GL_DIFFUSE, wall_color);
         glMaterialfv(GL_FRONT, GL_SPECULAR, wall_color);
 
-        // Declare shininess as a variable
         GLfloat shininess[] = {50.0f};
         glMaterialfv(GL_FRONT, GL_SHININESS, shininess);
 
-        // Check if the wall is part of the boundary
+        //Checando borda
         bool is_boundary_wall = 
             (wall.first == 0.0f || wall.first == 15.0f || 
              wall.second == 0.0f || wall.second == 15.0f);
 
-        // Draw the wall
+        //E desenhando a parade
         glPushMatrix();
-        glTranslatef(wall.first, wall.second + (is_boundary_wall ? 2.5f : 2.0f), 0.0f); // Center the wall vertically
+        glTranslatef(wall.first, wall.second + (is_boundary_wall ? 2.5f : 2.0f), 0.0f); // Centralizando parede
         if (is_boundary_wall) {
-            glScalef(1.5f, 5.0f, 3.0f); // Thicker and taller for boundary walls
+            glScalef(1.5f, 5.0f, 3.0f); //Maior escala para paredes de borda
         } else {
-            glScalef(1.0f, 4.0f, 3.0f); // Normal size for internal walls
+            glScalef(1.0f, 4.0f, 3.0f);
         }
-        glutSolidCube(1.0f); // Draw a solid cube (stretched into a wall)
+        glutSolidCube(1.0f); //Desenhando cubo esticado (parede)
         glPopMatrix();
     }
 }
 
+//Desenhando fim do labirinto - esfera verde
 void drawEndPoint() {
-    // Material properties for the endpoint
-    GLfloat end_ambient[] = {0.0f, 0.5f, 0.0f, 1.0f};  // Green ambient reflection
-    GLfloat end_diffuse[] = {0.0f, 1.0f, 0.0f, 1.0f};  // Bright green diffuse reflection
-    GLfloat end_specular[] = {0.5f, 1.0f, 0.5f, 1.0f}; // Green specular reflection
-    GLfloat end_shininess[] = {50.0f};                 // Moderate shininess
+    //Propriedades do fim do labirinto
+    GLfloat end_ambient[] = {0.0f, 0.5f, 0.0f, 1.0f};
+    GLfloat end_diffuse[] = {0.0f, 1.0f, 0.0f, 1.0f};
+    GLfloat end_specular[] = {0.5f, 1.0f, 0.5f, 1.0f}; 
+    GLfloat end_shininess[] = {50.0f};
 
-    // Apply the material properties to the endpoint
     glMaterialfv(GL_FRONT, GL_AMBIENT, end_ambient);
     glMaterialfv(GL_FRONT, GL_DIFFUSE, end_diffuse);
     glMaterialfv(GL_FRONT, GL_SPECULAR, end_specular);
     glMaterialfv(GL_FRONT, GL_SHININESS, end_shininess);
 
-    // Draw the endpoint as a sphere
     glPushMatrix();
-    glTranslatef(end_point.first, end_point.second, 0.5f); // Position the endpoint slightly above the ground
-    glutSolidSphere(0.5f, 20, 20); // Draw a solid sphere
+    glTranslatef(end_point.first, end_point.second, 0.5f);
+    glutSolidSphere(0.5f, 20, 20);
     glPopMatrix();
 }
 
+//Desenhando jogador: uma esfera reluzente
 void drawPlayer() {
-    // Mirror-like sphere material properties
-    GLfloat sphere_ambient[] = {0.0f, 0.0f, 0.0f, 1.0f};  // No ambient reflection
-    GLfloat sphere_diffuse[] = {0.8f, 0.8f, 0.8f, 1.0f};  // High diffuse reflection (white)
-    GLfloat sphere_specular[] = {1.0f, 1.0f, 1.0f, 1.0f}; // Maximum specular reflection (white)
-    GLfloat sphere_shininess[] = {128.0f};                // Maximum shininess for mirror effect
+    GLfloat sphere_ambient[] = {0.0f, 0.0f, 0.0f, 1.0f};
+    GLfloat sphere_diffuse[] = {0.8f, 0.8f, 0.8f, 1.0f};
+    GLfloat sphere_specular[] = {1.0f, 1.0f, 1.0f, 1.0f};
+    GLfloat sphere_shininess[] = {128.0f};
 
-    // Apply the material properties to the sphere
     glMaterialfv(GL_FRONT, GL_AMBIENT, sphere_ambient);
     glMaterialfv(GL_FRONT, GL_DIFFUSE, sphere_diffuse);
     glMaterialfv(GL_FRONT, GL_SPECULAR, sphere_specular);
@@ -201,6 +202,7 @@ void drawPlayer() {
     glPopMatrix();
 }
 
+//Desenho de luzes
 void drawLights() {
     for (int i = 0; i < lights.size(); i++) {
         if (!lights[i].active) continue;
@@ -208,10 +210,10 @@ void drawLights() {
         if (lights[i].thrown) {
             glEnable(GL_LIGHT0 + i);
 
-            // Position the light (keep z at 0.0 for ground level)
+            //Posicionando a luz num eixo Z = 0
             GLfloat light_position[] = {lights[i].pos[0], lights[i].pos[1], 0.0f, 1.0f};
             
-            // Use the pre-set color from initialization (don't modify it)
+            //Modificando cor da luz referente ao estoque
             GLfloat light_diffuse[] = {lights[i].cor[0], lights[i].cor[1], lights[i].cor[2], 1.0f};
             GLfloat light_specular[] = {lights[i].cor[0], lights[i].cor[1], lights[i].cor[2], 1.0f};
             GLfloat light_ambient[] = {0.0f, 0.0f, 0.0f, 1.0f};
@@ -221,7 +223,7 @@ void drawLights() {
             glLightfv(GL_LIGHT0 + i, GL_SPECULAR, light_specular);
             glLightfv(GL_LIGHT0 + i, GL_AMBIENT, light_ambient);
 
-            // Draw the wireframe sphere with the correct color
+            //Desenhando wireframe
             glPushMatrix();
             glTranslatef(lights[i].pos[0], lights[i].pos[1], 0.0f);
             glColor3f(lights[i].cor[0], lights[i].cor[1], lights[i].cor[2]);
@@ -236,7 +238,7 @@ void drawLights() {
 void gameDisplay() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
-    // Set up perspective view
+    //Configurando perspectiva
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluPerspective(60.0, 1.0, 0.1, 100.0);
@@ -244,18 +246,19 @@ void gameDisplay() {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     
-    // Position the camera at an angle
+    //Posicionando angulo da camera
 
     if (zoom_out) {
-        // Zoomed out view shows whole maze
-        gluLookAt(7.5, 7.5, camera_height,  // Camera position (center of maze, from above)
-                  7.5, 7.5, 0.0,            // Looking at center of maze
-                  0.0, 1.0, 0.0);           // Up vector
+        //Quando o jogo era top down, essa configuracao atual mostrava o labirinto inteiro no fim do jogo
+        //Agora so mostra o meio do labirinto
+        gluLookAt(7.5, 7.5, camera_height,  
+                  7.5, 7.5, 0.0,            
+                  0.0, 1.0, 0.0);
     } else {
-        // Normal view follows player
-        gluLookAt(player.pos[0] - 3.0, player.pos[1] - 3.0, camera_height, // Camera position (offset from player)
-                  player.pos[0], player.pos[1], 0.0,                       // Looking at player
-                  0.0, 0.0, 1.0);                                         // Up vector
+        //Perspectiva normal isometrica
+        gluLookAt(player.pos[0] - 3.0, player.pos[1] - 3.0, camera_height,
+                  player.pos[0], player.pos[1], 0.0,
+                  0.0, 0.0, 1.0);
     }
     
     drawMaze();
@@ -263,10 +266,10 @@ void gameDisplay() {
     drawPlayer();
     drawLights();
     
+    //Condicao de gameover
     if (game_over) {
         glDisable(GL_LIGHTING);
         glColor3f(1.0f, 1.0f, 1.0f);
-        // Position text in 3D space
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
         gluOrtho2D(0, glutGet(GLUT_WINDOW_WIDTH), 0, glutGet(GLUT_WINDOW_HEIGHT));
@@ -282,21 +285,20 @@ void gameDisplay() {
 void throwLight() {
     if (player.remaining_lights <= -1) return;
 
-    //player.remaining_lights = 14;
-    // Find the next available light in order
+    //Jogando as 14 luzes aqui
     for (int i = 0; i < lights.size(); i++) {
         if (lights[i].active && !lights[i].thrown) {
             lights[i].thrown = true;
             lights[i].pos[0] = player.pos[0];
             lights[i].pos[1] = player.pos[1];
             
-            // Set direction based on current light_direction
+            //Configurando direcao de jogar
             lights[i].dre[0] = light_direction[0];
             lights[i].dre[1] = light_direction[1];
             /*lights[i].dir[0] = light_direction[0];
             lights[i].dir[1] = light_direction[1];*/
             
-            // Keep the original color (don't modify lights[i].dir[2] as it contains the color info)
+            //Configurando que a luz nao bateu a parede
             lights[i].distance = 0.0f;
             lights[i].hit_wall = false;
             //player.remaining_lights--; 
@@ -306,15 +308,16 @@ void throwLight() {
     }
 }
 
+//Atualizando a luz relativo a sua distancia
 void updateLights() {
     for (auto &light : lights) {
         if (light.thrown && !light.hit_wall) {
-            // Move the light
-            light.pos[0] += light.dre[0] * 0.05f; // Slower movement
+            //Movendo a luz
+            light.pos[0] += light.dre[0] * 0.05f;
             light.pos[1] += light.dre[1] * 0.05f;
             light.distance += 0.05f;
 
-            // Check for collisions with walls
+            //Checando a colisao
             for (auto &wall : maze_walls) {
                 if (fabs(light.pos[0] - wall.first) < 0.3f && 
                     light.pos[1] >= wall.second && 
@@ -324,7 +327,7 @@ void updateLights() {
                 }
             }
 
-            // Stop the light if it reaches its maximum distance
+            //Ou fazendo a luz parar se chegou sua distancia maxima
             if (light.distance >= light.max_distance) {
                 light.hit_wall = true;
             }
@@ -332,6 +335,7 @@ void updateLights() {
     }
 }
 
+//Checando se o jogo terminou
 void update(int value) {
     if (game_start && !game_over) {
         spin += 0.1f;
@@ -339,7 +343,7 @@ void update(int value) {
         
         updateLights();
         
-        // Check if the player has reached the endpoint
+        //Checando endpoint
         if (sqrt(pow(player.pos[0] - end_point.first, 2) + pow(player.pos[1] - end_point.second, 2)) < 1.0f) {
             game_over = true;
             zoom_out = true;
@@ -350,53 +354,55 @@ void update(int value) {
     glutTimerFunc(16, update, 0);
 }
 
+//Controles
 void gameKeyboard(unsigned char key, int x, int y) {
     float move_speed = 0.2f;
     float new_x = player.pos[0];
     float new_y = player.pos[1];
 
     switch (key) {
+        //Reiniciar jogo
         case ' ':
             if (game_over) {
-                // Reset game state and switch to the start screen
                 game_start = false;
                 game_over = false;
                 zoom_out = false;
-                player = {{2.0f, 2.0f}, 3}; // Reset player position and lights
-                initMaze(); // Reinitialize the maze
-                glutDisplayFunc(menuDisplay); // Switch to the menu display
-                glutKeyboardFunc(menuKeyboard); // Switch to menu keyboard controls
+                player = {{2.0f, 2.0f}, 3};
+                initMaze();
+                glutDisplayFunc(menuDisplay);
+                glutKeyboardFunc(menuKeyboard);
                 glutPostRedisplay();
             } else {
                 throwLight();
             }
             break;
-        case 'a': // Move up
+        case 'a': //Esquerda
             if (!game_over) new_y += move_speed;
             light_direction[0] = 0.0f;
             light_direction[1] = 1.0f;
             break;
-        case 'd': // Move down
+        case 'd': //Direita
             if (!game_over) new_y -= move_speed;
             light_direction[0] = 0.0f;
             light_direction[1] = -1.0f;
             break;
-        case 's': // Move left
+        case 's': //Baixo
             if (!game_over) new_x -= move_speed;
             light_direction[0] = -1.0f;
             light_direction[1] = 0.0f;
             break;
-        case 'w': // Move right
+        case 'w': //Cima
             if (!game_over) new_x += move_speed;
             light_direction[0] = 1.0f;
             light_direction[1] = 0.0f;
             break;
-        case 27: // Exit on ESC
+        case 27: //ESC = Sair do jogo
             exit(0);
             break;
     }
 
-    // Collision detection
+    //Detectando se o jogador colidiu com uma parede
+    //Se sim, nao pode se movimentar a essa direcao
     bool can_move = true;
     for (auto &wall : maze_walls) {
         if (fabs(new_x - wall.first) < 0.7f && new_y >= wall.second - 0.7f && new_y <= wall.second + 4.7f) {
@@ -413,21 +419,22 @@ void gameKeyboard(unsigned char key, int x, int y) {
     glutPostRedisplay();
 }
 
+//REMOVER - O JOGO NAO REQUER MAIS SETAS
 void gameSpecialKeyboard(int key, int x, int y) {
     switch (key) {
-        case GLUT_KEY_UP: // Light direction: up
+        case GLUT_KEY_UP: 
             light_direction[0] = 0.0f;
             light_direction[1] = 1.0f;
             break;
-        case GLUT_KEY_DOWN: // Light direction: down
+        case GLUT_KEY_DOWN: 
             light_direction[0] = 0.0f;
             light_direction[1] = -1.0f;
             break;
-        case GLUT_KEY_LEFT: // Light direction: left
+        case GLUT_KEY_LEFT: 
             light_direction[0] = -1.0f;
             light_direction[1] = 0.0f;
             break;
-        case GLUT_KEY_RIGHT: // Light direction: right
+        case GLUT_KEY_RIGHT: 
             light_direction[0] = 1.0f;
             light_direction[1] = 0.0f;
             break;
@@ -435,16 +442,17 @@ void gameSpecialKeyboard(int key, int x, int y) {
 }
 
 void switchToGameMode() {
-    // Initialize game components
+    //Iniciando jogo
     initLights();
     initMaze();
     
-    // Reset game state
+    //Resetando jogo
     player = {{2.0f, 2.0f}, 3};
     game_over = false;
     zoom_out = false;
     
-    // Switch to game callbacks
+    //Jogo primeiro inicia no menu
+    //Se no menu, o jogador apertar para iniciar, o codigo do jogo comeca
     glutDisplayFunc([]() {
         if (game_start) {
             gameDisplay();
@@ -453,7 +461,7 @@ void switchToGameMode() {
         }
     });
     glutKeyboardFunc(gameKeyboard);
-    glutSpecialFunc(gameSpecialKeyboard); // Register special keyboard function
+    glutSpecialFunc(gameSpecialKeyboard); //OUTDATED DEMAISSSSSS
     glutTimerFunc(0, update, 0);
     
     game_start = true;
@@ -469,7 +477,7 @@ int main(int argc, char **argv) {
     
     initMenuLights();
     
-    // Start with menu
+    //Comecando menu
     glutDisplayFunc(menuDisplay);
     glutReshapeFunc(menuReshape);
     glutKeyboardFunc(menuKeyboard);
