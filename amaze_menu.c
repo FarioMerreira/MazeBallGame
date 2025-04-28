@@ -1,3 +1,5 @@
+//Codigo referente ao menu, baseado em uma das atividades em sala
+
 #include <GL/glut.h>
 #include "amaze_menu.h"
 #include <stdlib.h>
@@ -6,6 +8,8 @@
 #include <cmath>
 #include <string>
 
+//Variaveis para checar se o jogo comecou
+//E easter egg para remover cada luz
 bool game_start_menu = false;
 int red = 1, green = 1, blue = 1; 
 float spin_menu = 0.0f;
@@ -59,6 +63,7 @@ void initMenuLights(void)
     glEnable(GL_DEPTH_TEST);
 }
 
+//Para escrever o texto
 void drawText(float x, float y, const std::string &text) {
     glRasterPos2f(x, y);
     for (char c : text) {
@@ -67,7 +72,7 @@ void drawText(float x, float y, const std::string &text) {
 }
 
 void drawMenu() {
-    // Switch to 2D orthographic projection for text
+    //Gerando texto com projecao ortografica 2D
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
     glLoadIdentity();
@@ -77,16 +82,17 @@ void drawMenu() {
     glPushMatrix();
     glLoadIdentity();
     
-    // Disable lighting for text
+    //E desativando luz
     glDisable(GL_LIGHTING);
     glDisable(GL_DEPTH_TEST);
     
-    // Draw menu text
+    
     glColor3f(1, 1, 1);
     int windowWidth = glutGet(GLUT_WINDOW_WIDTH);
     int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
     
-    // Draw title
+    //O titulo do jogo esta sendo desenhado aqui
+    //Deve ter alguns problemas com outras resolucoes de monitor alem de 1920x1080
     drawText(windowWidth/2 - 75, windowHeight - 525, "MAZE BALL GAME");
     
     drawText(windowWidth/2 - 50, windowHeight - 650, "CONTROLS:");
@@ -95,11 +101,9 @@ void drawMenu() {
     drawText(windowWidth/2 - 90, windowHeight - 725, "SPACE - Throw Light");
     
     
-    // Draw instructions
     drawText(windowWidth/2 - 110, windowHeight - 875, "Press SPACE to start game");
     drawText(windowWidth/2 - 75, windowHeight - 900, "Press ESC to exit");
     
-    // Restore state
     glEnable(GL_DEPTH_TEST);
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();
@@ -112,18 +116,18 @@ void drawScene(bool showMenu) {
     glPushMatrix();
     gluLookAt(0.0, 0.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 
-    // Update light positions based on spin_menu
+    //Para fazer as luzes girarem
     GLfloat light0_position[] = { 0.0f, 1.5f * static_cast<GLfloat>(cos(spin_menu)), 1.5f * static_cast<GLfloat>(sin(spin_menu)), 0.0f };
     GLfloat light1_position[] = { 1.5f * static_cast<GLfloat>(cos(spin_menu)), 0.0f, 1.5f * static_cast<GLfloat>(sin(spin_menu)), 0.0f };
     GLfloat light2_position[] = { 1.5f * static_cast<GLfloat>(sin(spin_menu)), 1.5f * static_cast<GLfloat>(cos(spin_menu)), 0.0f, 0.0f };
 
-    // Set light positions
+    //Configurando posicoes
     glLightfv(GL_LIGHT0, GL_POSITION, light0_position);
     glLightfv(GL_LIGHT1, GL_POSITION, light1_position);
     glLightfv(GL_LIGHT2, GL_POSITION, light2_position); 
 
-    // Draw lights
-    // Red light
+    //Desenhando luzes
+    //R
     glPushMatrix();
     glRotated(spin_menu, 1.0, 0.0, 0.0);
     glTranslated(0.0, 1.5, 0.0);
@@ -133,7 +137,7 @@ void drawScene(bool showMenu) {
     glEnable(GL_LIGHTING);
     glPopMatrix();
 
-    // Green light
+    //G
     glPushMatrix();
     glRotated(spin_menu, 0.0, 1.0, 0.0);
     glTranslated(1.5, 0.0, 0.0);
@@ -143,7 +147,7 @@ void drawScene(bool showMenu) {
     glEnable(GL_LIGHTING);
     glPopMatrix();
 
-    // Blue light
+    //B
     glPushMatrix();
     glRotated(spin_menu, 0.0, 0.0, 1.0);
     glTranslated(-1.5, 0.0, 0.0);
@@ -153,7 +157,7 @@ void drawScene(bool showMenu) {
     glEnable(GL_LIGHTING);
     glPopMatrix();
     
-    // Main sphere
+    //Gerando a esfera do menu
     glutSolidSphere(1.0, 50, 50);
     
     glPopMatrix();
