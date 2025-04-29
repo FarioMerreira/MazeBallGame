@@ -24,7 +24,7 @@ Jogo era para ser em uma perspectiva top-down, mas desse jeito, o aplicativo nã
 
 Um "oversight" no código fez com que, inicialmente, a direção das luzes jogadas determinasse a cor delas
 
-Problmas na geração de paredes
+Problmas na geração de paredes fez com que o layout do mapa fosse bagunçado, fazendo o jogo se parecer mais como uma "caça ao tesouro" do que um desafio de labirinto
 
 # O que pode ser melhorado:
 Fazer o jogo ser mais completo com inimigos e colecionáveis
