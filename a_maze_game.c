@@ -34,7 +34,7 @@ struct Player {
 Player player = {{1.0f, 1.0f}, 3};
 std::vector<Light> lights;
 std::vector<std::pair<float, float>> maze_walls;
-std::pair<float, float> end_point = {15.0f, 15.0f};
+std::pair<float, float> end_point = {12.0f, 7.0f};
 
 //Camera isometrica
 float camera_distance = 5.0f;
