@@ -55,7 +55,7 @@ void initMaze() {
         // Paredes internas baseadas no desenho:
 
         // Região superior
-        {1.0f, 0.0f}, {1.0f, 2.0f},
+        {1.0f, 0.0f}, {1.0f, 3.0f},
         {3.0f, 0.0f}, {3.0f, 1.0f},
         {4.0f, 1.0f}, {7.0f, 1.0f},
         {6.0f, 0.0f}, {6.0f, 1.0f},
@@ -64,7 +64,7 @@ void initMaze() {
         {12.0f, 0.0f}, {12.0f, 2.0f},
 
         // Região central
-        {2.0f, 3.0f}, {2.0f, 7.0f},
+        {3.0f, 5.0f}, {2.0f, 7.0f},
         {4.0f, 3.0f}, {6.0f, 3.0f},
         {5.0f, 3.0f}, {5.0f, 5.0f},
         {7.0f, 4.0f}, {9.0f, 4.0f},
@@ -419,24 +419,23 @@ void gameKeyboard(unsigned char key, int x, int y) {
     glutPostRedisplay();
 }
 
-//REMOVER - O JOGO NAO REQUER MAIS SETAS
 void gameSpecialKeyboard(int key, int x, int y) {
     switch (key) {
         case GLUT_KEY_UP: 
-            light_direction[0] = 0.0f;
-            light_direction[1] = 1.0f;
+            light_direction[0] = 1.0f;
+            light_direction[1] = 0.0f;
             break;
         case GLUT_KEY_DOWN: 
-            light_direction[0] = 0.0f;
-            light_direction[1] = -1.0f;
-            break;
-        case GLUT_KEY_LEFT: 
             light_direction[0] = -1.0f;
             light_direction[1] = 0.0f;
             break;
+        case GLUT_KEY_LEFT: 
+            light_direction[0] = 0.0f;
+            light_direction[1] = 1.0f;
+            break;
         case GLUT_KEY_RIGHT: 
-            light_direction[0] = 1.0f;
-            light_direction[1] = 0.0f;
+            light_direction[0] = 0.0f;
+            light_direction[1] = -1.0f;
             break;
     }
 }
@@ -461,7 +460,7 @@ void switchToGameMode() {
         }
     });
     glutKeyboardFunc(gameKeyboard);
-    glutSpecialFunc(gameSpecialKeyboard); //OUTDATED DEMAISSSSSS
+    glutSpecialFunc(gameSpecialKeyboard);
     glutTimerFunc(0, update, 0);
     
     game_start = true;
