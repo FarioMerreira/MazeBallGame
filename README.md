@@ -27,6 +27,8 @@ Um "oversight" no código fez com que, inicialmente, a direção das luzes jogad
 Problmas na geração de paredes fez com que o layout do mapa fosse bagunçado, fazendo o jogo se parecer mais como uma "caça ao tesouro" do que um desafio de labirinto
 
 # O que pode ser melhorado:
+Como dito na seção anterior, o layout do "labirinto" podia ser mais coeso
+
 Fazer o jogo ser mais completo com inimigos e colecionáveis
 
 # O que cada integrante fez:
