@@ -127,6 +127,7 @@ void drawMaze() {
         //Se a parede não for iluminada, ela estará preta
         GLfloat wall_color[] = {0.0f, 0.0f, 0.0f, 1.0f};
         GLfloat ambient_color[] = {0.0f, 0.0f, 0.0f, 1.0f};
+        GLfloat diffuse_color[] = {0.3f, 0.3f, 0.3f, 1.0f};
 
         //Checando contato de luz
         for (auto &light : lights) { // Loop pelas luzes
