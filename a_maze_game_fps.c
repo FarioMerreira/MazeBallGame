@@ -124,19 +124,23 @@ void drawTextGame(float x, float y, const std::string &text) {
 void drawMaze() {
     for (auto &wall : maze_walls) {
         GLfloat wall_color[] = {0.0f, 0.0f, 0.0f, 1.0f};
+        GLfloat ambient_color[] = {0.0f, 0.0f, 0.0f, 1.0f};
 
-        for (auto &light : lights) {
-            if (light.thrown && !light.hit_wall) {
-                wall_color[0] = light.cor[0];
-                wall_color[1] = light.cor[1];
-                wall_color[2] = light.cor[2];
+        //Checando contato de luz
+        for (auto &light : lights) { // Loop pelas luzes
+            if (light.thrown && !light.hit_wall) { // Se a luz foi lançada e não atingiu uma parede
+                //Configurando a cor da parede referente à luz dominante
+                wall_color[0] = light.cor[0]; // Componente R
+                wall_color[1] = light.cor[1]; // Componente G
+                wall_color[2] = light.cor[2]; // Componente B
                 break;
             }
         }
 
-        glMaterialfv(GL_FRONT, GL_AMBIENT, wall_color);
-        glMaterialfv(GL_FRONT, GL_DIFFUSE, wall_color);
-        glMaterialfv(GL_FRONT, GL_SPECULAR, wall_color);
+        //Aplicando propriedades da parede
+        glMaterialfv(GL_FRONT, GL_AMBIENT, ambient_color); // Cor ambiente
+        glMaterialfv(GL_FRONT, GL_DIFFUSE, wall_color); // Cor difusa
+        glMaterialfv(GL_FRONT, GL_SPECULAR, wall_color); // Cor especular
 
         GLfloat shininess[] = {50.0f};
         glMaterialfv(GL_FRONT, GL_SHININESS, shininess);
