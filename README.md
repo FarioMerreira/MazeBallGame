@@ -8,9 +8,9 @@ O jogo conta com duas perspectivas de câmera: isométrica (de cima) e em primei
 # Imagens
 ![Tela de inicio](https://i.imgur.com/WkDoRmz.png)
 
-![Jogo em execução](https://i.imgur.com/McIO9RN.png)
+![Jogo em execução](https://i.imgur.com/jOD6IvB.png)
 
-![Fim](https://i.imgur.com/IDcC9AH.png)
+![Fim](https://i.imgur.com/rQFtNgi.png)
 
 ![Modo FPS](https://i.imgur.com/9dEjoLe.png)
 
