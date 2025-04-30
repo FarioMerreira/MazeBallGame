@@ -8,11 +8,11 @@ O jogo conta com duas perspectivas de câmera: isométrica (de cima) e em primei
 # Imagens
 ![Tela de inicio](https://i.imgur.com/WkDoRmz.png)
 
-![Jogo em execução](https://i.imgur.com/jOD6IvB.png)
+![Jogo em execução](https://i.imgur.com/ytIKuf9.png)
 
-![Fim](https://i.imgur.com/rQFtNgi.png)
+![Fim](https://i.imgur.com/7qRyWvi.png)
 
-![Modo FPS](https://i.imgur.com/9dEjoLe.png)
+![Modo FPS](https://i.imgur.com/GxM31Ks.png)
 
 # Jogabilidade
 Usando WASD e as setas do teclado, o jogador move a esfera e desvia das paredes do labirinto para encontrar a saída.
@@ -36,7 +36,7 @@ Problmas na geração de paredes fez com que o layout do mapa fosse inicialmente
 # O que pode ser melhorado:
 Fazer o jogo ser mais completo com labirintos maiores, inimigos e colecionáveis.
 
-Fazer com que múltiplas luzes consigam iluminar uma parede em vez do domínio estar reservado para a primeira luz em movimento.
+Fazer com que múltiplas luzes consigam iluminar uma parede em vez do domínio estar reservado para a primeira luz em movimento, além de deixar as paredes realmente sólidas.
 
 # O que cada integrante fez:
 André: Programação da tela de início, movimento e design geral
