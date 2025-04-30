@@ -53,22 +53,28 @@ void initMaze() {
 
     // Define um layout simples de labirinto (grade 10x10)
     // 1 representa uma parede, 0 representa um espaço vazio
-    int maze_layout[10][10] = {
-        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-        {1, 0, 0, 0, 1, 0, 0, 0, 0, 1},
-        {1, 0, 1, 0, 1, 0, 1, 1, 0, 1},
-        {1, 0, 1, 0, 0, 0, 0, 1, 0, 1},
-        {1, 0, 1, 1, 1, 1, 0, 1, 0, 1},
-        {1, 0, 0, 0, 0, 1, 0, 0, 0, 1},
-        {1, 1, 1, 1, 0, 1, 1, 1, 0, 1},
-        {1, 0, 0, 1, 0, 0, 0, 1, 0, 1},
-        {1, 0, 0, 0, 0, 1, 0, 0, 0, 1},
-        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
+    int maze_layout[16][16] = {
+        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+        {1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1},
+        {1,0,1,1,1,1,1,0,1,0,1,1,1,1,0,1},
+        {1,0,1,0,0,0,1,0,0,0,1,0,0,1,0,1},
+        {1,0,1,0,1,0,1,1,1,1,1,0,1,1,0,1},
+        {1,0,1,0,1,0,0,0,0,0,0,0,1,0,0,1},
+        {1,0,1,0,1,1,1,1,1,1,1,1,1,0,1,1},
+        {1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1},
+        {1,0,1,1,1,1,1,1,1,1,1,1,1,1,0,1},
+        {1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1},
+        {1,0,1,1,1,1,1,1,1,1,1,1,0,1,0,1},
+        {1,0,1,0,0,0,0,0,0,0,0,1,0,1,0,1},
+        {1,0,1,0,1,1,1,1,1,1,0,1,0,1,0,1},
+        {1,0,1,0,0,0,1,0,0,1,0,1,0,1,0,1},
+        {1,0,1,1,1,0,1,0,0,0,0,0,0,0,0,1},
+        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
     };
 
     // Converte o layout em coordenadas de paredes
-    for (int y = 0; y < 10; y++) {
-        for (int x = 0; x < 10; x++) {
+    for (int y = 0; y < 16; y++) {
+        for (int x = 0; x < 16; x++) {
             if (maze_layout[y][x] == 1) {
                 maze_walls.push_back({x * cell_size, y * cell_size});
             }
@@ -76,7 +82,7 @@ void initMaze() {
     }
 
     // Define o ponto de saída no canto inferior direito
-    end_point = {8.0f, 1.0f}; // Centro da célula (8, 1)
+    end_point = {7.0f, 13.5f}; // Centro da célula (8, 1)
 
     // Define o ponto de spawn do jogador no canto superior esquerdo
     player.pos[0] = 1.5f; // Centro da célula (1, 1)
@@ -426,7 +432,7 @@ void switchToGameMode() {
     initMaze(); // Configura o labirinto
     
     //Resetando jogo
-    player = {{1.0f, 8.0f}, 10}; // Posição inicial do jogador
+    player = {{1.0f, 1.0f}, 10}; // Posição inicial do jogador
     game_over = false; // Reseta estado de game over
     zoom_out = false; // Desativa zoom out
     
