@@ -126,6 +126,7 @@ void drawMaze() {
     for (auto &wall : maze_walls) { // Loop pelas paredes do labirinto
         //Se a parede não for iluminada, ela estará preta
         GLfloat wall_color[] = {0.0f, 0.0f, 0.0f, 1.0f};
+        GLfloat ambient_color[] = {0.0f, 0.0f, 0.0f, 1.0f};
 
         //Checando contato de luz
         for (auto &light : lights) { // Loop pelas luzes
@@ -139,7 +140,7 @@ void drawMaze() {
         }
 
         //Aplicando propriedades da parede
-        glMaterialfv(GL_FRONT, GL_AMBIENT, wall_color); // Cor ambiente
+        glMaterialfv(GL_FRONT, GL_AMBIENT, ambient_color); // Cor ambiente
         glMaterialfv(GL_FRONT, GL_DIFFUSE, wall_color); // Cor difusa
         glMaterialfv(GL_FRONT, GL_SPECULAR, wall_color); // Cor especular
 
