@@ -3,7 +3,7 @@
 
 O jogador controla uma esfera espelhada que se move por um labirinto no escuro total, mas pode lançar luzes que se apagam rapidamente. O objetivo é chegar ao fim do labirinto antes que todas as luzes se apaguem. Para um desafio adicional, os jogadores podem iniciar um modo NG+ ao completar o objetivo, com luzes que se apagam de modo mais rápido.
 
-O jogo conta com duas perspectivas de câmera: isométrica (de cima) e em primeira pessoa. O modo FPS foi balançeado para adicionar mais luzes ao jogador.
+O jogo conta com duas perspectivas de câmera: isométrica (de cima) e em primeira pessoa, cada uma com dois designs de labirinto diferentes. O modo FPS foi balanceado para adicionar mais luzes ao jogador.
 
 # Imagens
 ![Tela de inicio](https://i.imgur.com/WkDoRmz.png)
@@ -35,6 +35,8 @@ Problmas na geração de paredes fez com que o layout do mapa fosse inicialmente
 
 # O que pode ser melhorado:
 Fazer o jogo ser mais completo com labirintos maiores, inimigos e colecionáveis.
+
+Fazer com que múltiplas luzes consigam iluminar uma parede em vez do domínio estar reservado para a primeira luz em movimento.
 
 # O que cada integrante fez:
 André: Programação da tela de início, movimento e design geral
