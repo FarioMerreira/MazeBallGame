@@ -36,7 +36,7 @@ Problmas na geração de paredes fez com que o layout do mapa fosse inicialmente
 # O que pode ser melhorado:
 Fazer o jogo ser mais completo com labirintos maiores, inimigos e colecionáveis.
 
-Fazer com que múltiplas luzes consigam iluminar uma parede em vez do domínio estar reservado para a primeira luz em movimento, além de deixar as paredes realmente sólidas.
+Fazer com que múltiplas luzes consigam iluminar uma parede em vez do domínio estar reservado para a primeira luz em movimento, além de deixar as luzes em formato de holofote, iluminando apenas as paredes ao seu redor.
 
 # O que cada integrante fez:
 André: Programação da tela de início, movimento e design geral
